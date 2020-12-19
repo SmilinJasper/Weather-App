@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="weather-app-container">
+        <div class="temperature-container">
+            <div class="weather-icon"><img src="icons/01d.png"></div>
+            <div class="temperature-info">
+                <div class="temperature-value">
+                    <p><span class="temperature-number">30</span><span class="initial-unit">°C</span></p>
+                </div>
+                <span class="switch-unit">°F</span>
+            </div>
+        </div>
+        <div class="weather-info-container">
+            <div class="weather-feels-like">
+                <p>Feels like <span>30°</span></p>
+            </div>
+            <div class="humidity">
+                <p>Humidity <span>55%</span></p>
+            </div>
+            <div class="precipitation">
+                <p>Precipitation <span>55%</span></p>
+            </div>
+            <div class="wind-info">
+                <div class="wind-direction">
+                    <img src="icons/navigation-compass.svg">
+                </div>
+                <div class="wind-speed">
+                    <p>Wind <span>4.0 kmph</span></p>
+                </div>
+            </div>
+            <div class="weather-description">
+                <p>Sunny</p>
+            </div>
+            <div class="location-info">
+                <p>Sulur, India</p>
+            </div>
+        </div>
+        <div class="extra-weather-info-container">
+            <div class="dew-point">Dew point <span>10</span></div>
+            <div class="visibility">Visibility <span>18 km</span></div>
+            <div class="sunrise">Sunrise <span>5:31AM</span></div>
+            <div class="sunset">Sunset <span>6:31PM</span></div>
+        </div>
+        <div class="historical-data">
+            <div class="daily-data">
+                <p class="daily-data-day-0">THURS</p>
+                <div class="daily-data-icon-0"><img src="icons/01d.png"></div>
+                <p class="daily-min-max daily-data-min-max-0">30° | 27°</p>
+            </div>
+            <div class="daily-data">
+                <p class="daily-data-day-1">FRI</p>
+                <div class="daily-data-icon-1"><img src="icons/03d.png"></div>
+                <p class="daily-min-max daily-data-min-max-1">28° | 24°</p>
+            </div>
+            <div class="daily-data">
+                <p class="daily-data-day-2">SAT</p>
+                <div class="daily-data-icon-2"><img src="icons/04d.png"></div>
+                <p class="daily-min-max daily-data-min-max-2">26° | 22°</p>
+            </div>
+            <div class="daily-data">
+                <p class="daily-data-day-3">SUN</p>
+                <div class="daily-data-icon-3"><img src="icons/09d.png"></div>
+                <p class="daily-min-max daily-data-min-max-3">24° | 21°</p>
+            </div>
+            <div class="daily-data">
+                <p class="daily-data-day-4">MON</p>
+                <div class="daily-data-icon-4"><img src="icons/10d.png"></div>
+                <p class="daily-min-max daily-data-min-max-4">30° | 27°</p>
+            </div>
+            <div class="daily-data">
+                <p class="daily-data-day-5">TUE</p>
+                <div class="daily-data-icon-5"><img src="icons/11d.png"></div>
+                <p class="daily-min-max daily-data-min-max-5">21° | 19°</p>
+            </div>
+            <div class="daily-data">
+                <p class="daily-data-day-6">WED</p>
+                <div class="daily-data-icon-6"><img src="icons/13d.png"></div>
+                <p class="daily-min-max daily-data-min-max-6">0° | -3°</p>
+            </div>
+            <div class="daily-data">
+                <p class="daily-data-day-7">THURS</p>
+                <div class="daily-data-icon-7"><img src="icons/50d.png"></div>
+                <p class="daily-min-max daily-data-min-max-7">0° | -3°</p>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

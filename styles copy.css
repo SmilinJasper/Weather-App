@@ -1,0 +1,183 @@
+body {
+    background: linear-gradient(to right, #110138, #0e113a);
+}
+
+.weather-app-container {
+    display: grid;
+    /*grid-template: "a b c" 200px 300px auto "d d d" auto;*/
+    grid-template-rows: 250px 100px;
+    grid-template-columns: 200px auto 262.73px;
+    grid-gap: 5px;
+    : 'Nunito', 'sans-serif';
+    background: #CA353E;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 350px;
+    width: 750px;
+    font-weight: bold;
+    border: 3px solid whitesmoke;
+    border-radius: 4px;
+}
+
+.temperature-container {
+    text-align: center;
+    background: #c0eaf1;
+}
+
+.temperature-value {
+    position: absolute;
+    top: 25px;
+    font-size: 100px;
+    font-weight: 900;
+}
+
+.initial-unit {
+    font-size: 50px;
+    font-weight: bold;
+    position: absolute;
+    top: 100px;
+}
+
+.switch-unit {
+    position: absolute;
+    top: 150px;
+    left: 125px;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.switch-unit:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.weather-info-container {
+    background: #c0eaf1;
+    padding-left: 8px;
+    line-height: 1em;
+}
+
+.weather-feels-like {
+    color: gray;
+}
+
+.weather-feels-like span {
+    color: black;
+}
+
+.humidity {
+    color: gray;
+}
+
+.humidity span {
+    color: black;
+}
+
+.precipitation {
+    color: gray;
+}
+
+.precipitation span {
+    color: black;
+}
+
+.wind-speed {
+    color: gray;
+}
+
+.wind-speed span {
+    color: black;
+    position: relative;
+    left: 23px;
+}
+
+.wind-speed span::before {
+    content: url(icons/navigation-compass.svg);
+    position: absolute;
+    left: -23px;
+    top: -1px;
+    transform: rotateZ(45deg);
+}
+
+.weather-description {
+    position: absolute;
+    top: 115px;
+    font-size: 50px;
+}
+
+.location-info {
+    position: absolute;
+    top: 180px;
+    font-size: 30px;
+    font-weight: normal;
+}
+
+.extra-weather-info-container {
+    background: #c0eaf1;
+    padding: 110px 0px 0px 8px;
+    line-height: 2em;
+}
+
+.dew-point {
+    color: gray;
+}
+
+.dew-point span {
+    color: black;
+}
+
+.visibility {
+    color: gray;
+}
+
+.visibility span {
+    color: black;
+}
+
+.sunrise {
+    color: gray;
+}
+
+.sunrise span {
+    color: black;
+}
+
+.sunset {
+    color: gray;
+}
+
+.sunset span {
+    color: black;
+}
+
+.historical-data {
+    background: #CA353E;
+    margin-left: 3px;
+    width: 747px;
+    height: 95px;
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: 90.375px 90.375px 90.375px 90.375px 90.375px 90.375px 90.375px 90.375px;
+    font-size: 12px;
+    line-height: 0%;
+}
+
+.daily-data {
+    height: 92px;
+    background: #c0eaf1;
+    text-align: center;
+}
+
+.daily-data img {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    top: -5px;
+}
+
+.daily-min-max {
+    position: relative;
+    top: -10px;
+}
