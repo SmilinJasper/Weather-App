@@ -159,7 +159,7 @@ body {
     color: black;
 }
 
-.historical-data {
+.chronological-data {
     margin-left: 3px;
     width: 747px;
     height: 95px;
@@ -258,7 +258,7 @@ body {
     .wind-direction {
         lefT: 40px;
     }
-    .historical-data {
+    .chronological-data {
         height: 98px;
         width: 100%;
         display: flex;
