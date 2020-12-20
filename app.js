@@ -12,9 +12,8 @@ const visibilityElement = document.querySelector(".visibility");
 const sunriseElement = document.querySelector(".sunrise");
 const sunsetElement = document.querySelector(".sunset");
 
-const dailyDataDayNameElements = document.querySelectorAll(".daily-data-day-0, .daily-data-day-1, .daily-data-day-2, .daily-data-day-3, .daily-data-day-4, .daily-data-day-5, .daily-data-day-6, .daily-data-day-7");
-const dailyDataDayIconElements = document.querySelectorAll(".daily-data-icon-0, .daily-data-icon-1,.daily-data-icon-2,.daily-data-icon-3,.daily-data-icon-4,.daily-data-icon-5,.daily-data-icon-6,.daily-data-icon-7");
-const dailyDataDayMinMaxElements = document.querySelectorAll(".daily-data-min-max-0, .daily-data-min-max-1,.daily-data-min-max-2,.daily-data-min-max-3,.daily-data-min-max-4,.daily-data-min-max-5,.daily-data-min-max-6,.daily-data-min-max-7");
+const chronologicalElements = document.querySelectorAll(".daily-data");
+
 const switchUnitElement = document.querySelector(".switch-unit");
 
 const KELVIN = 273;
@@ -70,9 +69,9 @@ function getWeather() {
     sunsetElement.innerHTML = `<div class="sunset">Sunset <span>${weather.sunset}</span></div>`;
 
     for (let i = 0; i <= 7; i++) {
-        dailyDataDayNameElements[i].innerHTML = `${weather.daily[i].name}`;
-        dailyDataDayIconElements[i].innerHTML = `<img src="icons/${weather.daily[i].icon}.png">`;
-        dailyDataDayMinMaxElements[i].innerHTML = `${weather.daily[i].max}° | ${weather.daily[i].min}°`;
+        chronologicalElements[i].children[0].innerHTML = `${weather.daily[i].name}`;
+        chronologicalElements[i].children[1].innerHTML = `<img src="icons/${weather.daily[i].icon}.png">`;
+        chronologicalElements[i].children[2].innerHTML = `${weather.daily[i].max}° | ${weather.daily[i].min}°`;
     }
 
     switchUnitElement.onclick = () => { switchUnit(); };
@@ -136,7 +135,6 @@ function runApi(lat, lon) {
                 weather.daily[i].min = Math.floor(data.daily[i].temp.min - KELVIN);
                 weather.daily[i].max = Math.floor(data.daily[i].temp.max - KELVIN);
             }
-
             getLocationInfo(lat, lon);
         });
 }
