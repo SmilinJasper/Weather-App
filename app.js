@@ -44,6 +44,14 @@ searchButtonElement.onclick = () => {
     runApiByCityName();
 }
 
+searchBarElement.addEventListener("keydown", (event) => {
+    let key = event.keyCode;
+    if (key == 13) {
+        console.log("pressed");
+        runApiByCityName();
+    }
+});
+
 getLocationElement.onclick = () => {
     getLocation();
 }
@@ -68,7 +76,7 @@ function getPosition(position) {
 function showError(error) {
     weatherAppContainerElement.style.gridTemplateRows = "auto 250px 95px";
     notificationElement.style.display = "block";
-    notificationElement.innerHTML = `${error.message}`
+    notificationElement.innerHTML = `${error.message}`;
 }
 
 function displayWeather() {
