@@ -3,10 +3,65 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
+.content-wrapper {
+    height: 630px;
+    position: relative;
+    margin: -8px;
+}
+
+.search-bar-container {
+    display: flex;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.search-bar {
+    height: 30px;
+    width: 460px;
+    font-size: 20px;
+}
+
+.get-location {
+    background: transparent;
+    padding: 8px;
+    position: absolute;
+    left: 399px;
+    top: 1px;
+    border: 0px;
+    height: 38px;
+}
+
+.get-location:hover {
+    background: whitesmoke;
+    cursor: pointer;
+}
+
+.search-bar-container img {
+    height: 25px;
+    width: 25px;
+    margin-top: -1px;
+}
+
+.search-button {
+    border: 0px;
+    padding-top: 3px;
+    position: absolute;
+    left: 439px;
+    top: 1px;
+    height: 38px;
+}
+
+.search-button img {
+    height: 22px;
+    width: 22px;
+}
+
 .weather-app-container {
     display: grid;
     /*grid-template: "a b c" 200px 300px auto "d d d" auto;*/
-    grid-template-rows: 250px 100px;
+    grid-template-rows: 250px 95px;
     grid-template-columns: 200px 350px auto;
     grid-gap: 5px;
     background: #344d03;
@@ -14,35 +69,53 @@ body {
     top: 20%;
     left: 50%;
     transform: translateX(-50%);
-    height: 350px;
+    height: auto;
     width: 750px;
     font-weight: bold;
     border: 3px solid#344d03;
     border-radius: 4px;
 }
 
+.notification {
+    background: #facdd1;
+    grid-column: 1/4;
+    color: #520008;
+    font-size: 22.5px;
+    text-align: center;
+    font-weight: normal;
+    padding: 4px;
+    display: none;
+}
+
+.notification p {
+    margin: 0px;
+}
+
 .temperature-container {
+    position: relative;
     text-align: center;
     background: whitesmoke;
 }
 
 .temperature-value {
     position: absolute;
-    top: 25px;
     font-size: 100px;
     font-weight: 900;
+}
+
+.temperature-value p {
+    margin: 0px
 }
 
 .initial-unit {
     font-size: 50px;
     font-weight: bold;
     position: absolute;
-    top: 100px;
 }
 
 .switch-unit {
     position: absolute;
-    top: 175px;
+    top: 72.5%;
     left: 125px;
     font-size: 20px;
     font-weight: normal;
@@ -57,6 +130,7 @@ body {
 }
 
 .weather-info-container {
+    position: relative;
     background: whitesmoke;
     padding-left: 8px;
     line-height: 1em;
@@ -109,14 +183,13 @@ body {
 
 .weather-description {
     position: absolute;
-    top: 135px;
     font-size: 30px;
     text-transform: capitalize;
 }
 
 .location-info {
     position: absolute;
-    top: 180px;
+    top: 72.5%;
     font-size: 25px;
     font-weight: normal;
 }
@@ -165,7 +238,7 @@ body {
     height: 95px;
     display: grid;
     grid-gap: 3px;
-    grid-template-columns: 90.375px 90.375px 90.375px 90.375px 90.375px 90.375px 90.375px 90.375px;
+    grid-template-columns: repeat(9, 90.375px);
     font-size: 12px;
     line-height: 0%;
 }
@@ -189,11 +262,55 @@ body {
 }
 
 @media only screen and (max-width: 758px) {
+    .content-wrapper {
+        height: 740px;
+        position: relative;
+    }
+    .search-bar-container {
+        width: 300px;
+        top: 12px;
+        border-left: 3px solid #344d03;
+        border-right: 3px solid #344d03;
+        border-top: 3px solid #344d03;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+    .search-bar {
+        height: 25px;
+        width: 300px;
+        font-size: 16px;
+        border: 3px solid transparent;
+    }
+    .get-location {
+        left: 232px;
+        top: 0px;
+        height: 33px;
+    }
+    .get-location img {
+        height: 22px;
+        width: 22px;
+        margin-top: -2px;
+    }
+    .search-button {
+        left: 266px;
+        height: 33px;
+        width: 34px;
+        border: 0px;
+    }
+    .search-button img {
+        height: 15px;
+        width: 15px;
+    }
     .weather-app-container {
         display: block;
         width: 300px;
         height: 519px;
         margin-top: -100px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+    .notification {
+        font-size: 17.5px;
     }
     .temperature-container {
         height: 300px;

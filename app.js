@@ -1,3 +1,8 @@
+const getLocationElement = document.querySelector(".get-location");
+const searchBarElement = document.querySelector(".search-bar");
+const searchButtonElement = document.querySelector(".search-button");
+const weatherAppContainerElement = document.querySelector(".weather-app-container");
+const notificationElement = document.querySelector(".notification");
 const temperatureValueElement = document.querySelector('.temperature-value');
 const weatherIconElement = document.querySelector('.weather-icon');
 const weatherDescriptionElement = document.querySelector('.weather-description');
@@ -11,7 +16,6 @@ const dewPointElement = document.querySelector(".dew-point");
 const visibilityElement = document.querySelector(".visibility");
 const sunriseElement = document.querySelector(".sunrise");
 const sunsetElement = document.querySelector(".sunset");
-
 const chronologicalElements = document.querySelectorAll(".daily-data");
 
 const switchUnitElement = document.querySelector(".switch-unit");
@@ -35,26 +39,39 @@ const weather = {
     }
 }
 
+
+searchButtonElement.onclick = () => {
+    runApiByCityName();
+}
+
+getLocationElement.onclick = () => {
+    getLocation();
+}
+
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(getPosition, showError);
     } else {
-        console.log(`Browser doesn't support Geolocation`);
-    }
-
-    function getPosition(position) {
-        let lat = position.coords.latitude;
-        let lon = position.coords.longitude;
-
-        runApi(lat, lon);
-    }
-
-    function showError(error) {
-        console.log(error.message);
+        weatherAppContainerElement.style.gridRowsTemplate = "auto 250px 95px";
+        notificationElement.style.display = "block";
+        notificationElement.innerHTML = `Browser doesn't support Geolocation`;
     }
 }
 
-function getWeather() {
+function getPosition(position) {
+    let lat = position.coords.latitude;
+    let lon = position.coords.longitude;
+
+    runApi(lat, lon);
+}
+
+function showError(error) {
+    weatherAppContainerElement.style.gridTemplateRows = "auto 250px 95px";
+    notificationElement.style.display = "block";
+    notificationElement.innerHTML = `${error.message}`
+}
+
+function displayWeather() {
     temperatureValueElement.innerHTML = `<p><span class="temperature-number">${weather.temperature.value}</span><span class="initial-unit">°C</span></p>`
     weatherIconElement.innerHTML = `<img src="icons/${weather.iconId}.png"></img>`
     weatherDescriptionElement.innerHTML = ` <p>${weather.description}</p>`;
@@ -139,8 +156,6 @@ function runApi(lat, lon) {
         });
 }
 
-getLocation();
-
 function getLocationInfo(lat, lon) {
     const api = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`;
 
@@ -154,8 +169,29 @@ function getLocationInfo(lat, lon) {
             weather.locationInfo = `${data.name}, ${data.sys.country}`;
         })
         .then(() => {
-            getWeather();
+            displayWeather();
         });
+}
+
+function runApiByCityName() {
+    let searchText = searchBarElement.value;
+    const api = `http://api.openweathermap.org/data/2.5/weather?q=${searchText}&appid=7a75f753f5fbb12eda481588680cd087`;
+    fetch(api)
+        .then((respone) => {
+            const data = respone.json();
+            return data;
+        })
+        .then((data) => {
+            console.log(data);
+            const lat = data.coord.lat;
+            const lon = data.coord.lon;
+            const coords = [lat, lon]
+            console.log(coords);
+            return coords;
+        })
+        .then((coords) => {
+            runApi(coords[0], coords[1]);
+        })
 }
 
 function getDayName(dayNo) {
@@ -193,7 +229,7 @@ function switchUnit() {
         dewPointElement.innerHTML = `Dew point <span>${Math.floor(weather.dew_point*1.8+32)}°</span>`;
 
         for (let i = 0; i <= 7; i++) {
-            dailyDataDayMinMaxElements[i].innerHTML = `${Math.floor(weather.daily[i].max*1.8+32)}° | ${Math.floor(weather.daily[i].min*1.8+32)}°`;
+            chronologicalElements[i].children[2].innerHTML = `${Math.floor(weather.daily[i].max*1.8+32)}° | ${Math.floor(weather.daily[i].min*1.8+32)}°`;
         }
     } else {
         weather.temperature.unit = "celcius";
@@ -203,7 +239,9 @@ function switchUnit() {
         weatherFeelsLikeElement.innerHTML = ` <p>Feels like <span>${weather.temperature.feels_like}°</span></p>`;
         dewPointElement.innerHTML = `Dew point <span>${weather.dew_point}°</span>`;
         for (let i = 0; i <= 7; i++) {
-            dailyDataDayMinMaxElements[i].innerHTML = `${weather.daily[i].max}° | ${weather.daily[i].min}°`;
+            chronologicalElements[i].children[2].innerHTML = `${weather.daily[i].max}° | ${weather.daily[i].min}°`;
         }
     }
 }
+
+getLocation();
