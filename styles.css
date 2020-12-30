@@ -11,25 +11,31 @@ body {
 
 .search-bar-container {
     display: flex;
+    flex-wrap: wrap;
+    width: 531px;
     position: absolute;
     top: 5%;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1;
 }
 
 .search-bar {
     height: 36px;
-    width: 468px;
+    width: 531px;
     font-size: 20px;
-    border: 0px;
     padding: 1px 1px 3px 8px;
+    border-top: 0px;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
 }
 
 .get-location {
     background: transparent;
     padding: 8px;
     position: absolute;
-    left: 401.5px;
+    left: 443.5px;
     border: 0px;
     height: 40px;
 }
@@ -48,10 +54,8 @@ body {
     border: 0px;
     padding-top: 3px;
     position: absolute;
-    left: 439px;
+    left: 481px;
     height: 40px;
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
     background: white;
 }
 
@@ -62,6 +66,29 @@ body {
 .search-button img {
     height: 22px;
     width: 22px;
+}
+
+.suggestion {
+    background: white;
+    height: 36px;
+    width: 531px;
+    font-size: 20px;
+    padding: 1px 1px 3px 8px;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    position: relative;
+}
+
+.suggestion:hover {
+    background: rgb(240, 240, 240);
+    cursor: pointer;
+}
+
+.suggestion p {
+    margin: 0px;
+    position: absolute;
+    top: 6px;
 }
 
 .weather-app-container {
@@ -80,6 +107,7 @@ body {
     font-weight: bold;
     border: 3px solid#344d03;
     border-radius: 4px;
+    z-index: 0;
 }
 
 .notification {
@@ -103,6 +131,12 @@ body {
     background: whitesmoke;
 }
 
+.temperature-info {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 27px;
+}
+
 .temperature-value {
     position: absolute;
     font-size: 100px;
@@ -114,9 +148,10 @@ body {
 }
 
 .initial-unit {
+    position: relative;
+    top: -50px;
     font-size: 50px;
     font-weight: bold;
-    position: absolute;
 }
 
 .switch-unit {

@@ -47,7 +47,6 @@ searchButtonElement.onclick = () => {
 searchBarElement.addEventListener("keydown", (event) => {
     let key = event.keyCode;
     if (key == 13) {
-        console.log("pressed");
         runApiByCityName();
     }
 });
@@ -181,10 +180,65 @@ function getLocationInfo(lat, lon) {
         });
 }
 
+function placeName(placeNameObject) {
+    if (placeNameObject.city) {
+        return `<p>${placeNameObject.city}, ${placeNameObject.state},${placeNameObject.country}</p>`;
+    } else if (placeNameObject.state) {
+        return `<p>${placeNameObject.state},${placeNameObject.country}</p>`;
+    } else {
+        return `<p>${placeNameObject.country}</p>`;
+    }
+}
+
+function removeNodes(nodeArray, numberOfNodesToRemove) {
+    for (let i = 0; i == numberOfNodesToRemove; i++) { nodeArray[i].remove(); }
+}
+
+searchBarElement.oninput = () => {
+    const searchBarContainerElement = document.querySelector(".search-bar-container");
+
+    let searchText = searchBarElement.value;
+    const apiKey = "ECzcVm1vzmQ07xEB_0IwcVe-AlUPYOl9QxIz1NVSTG8";
+    const api = `https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json?apiKey=${apiKey}&query=${searchText}&maxresults=4`;
+
+    fetch(api)
+        .then(response => response.json())
+        .then((data) => {
+            console.log(data);
+
+            let suggestionElements = document.querySelectorAll(".suggestion");
+
+            if (suggestionElements[i] != undefined) {
+                console.log(true);
+                removeNodes(suggestionElements, suggestionElements.length);
+            }
+
+            for (let i = 0; i < data.suggestions.length; i++) {
+                const suggestion = document.createElement("div");
+                suggestion.className = "suggestion";
+                searchBarContainerElement.append(suggestion);
+            }
+
+            suggestionElements = document.querySelectorAll(".suggestion");
+
+            for (let i = 0; i < suggestionElements.length; i++) {
+                suggestionElements[i].innerHTML = placeName(data.suggestions[i].address);
+            }
+
+            for (let i = 0; i < suggestionElements.length; i++) {
+                suggestionElements[i].onclick = () => {
+                    searchBarElement.value = suggestionElements[i].innerText;
+                    runApiByCityName();
+                }
+            }
+        });
+}
+
 function runApiByCityName() {
     let searchText = searchBarElement.value;
-    const api = `http://api.openweathermap.org/data/2.5/weather?q=${searchText}&appid=7a75f753f5fbb12eda481588680cd087`;
-    fetch(api)
+    const apiUrlForWeather = `http://api.openweathermap.org/data/2.5/weather?q=${searchText}&appid=7a75f753f5fbb12eda481588680cd087`;
+
+    fetch(apiUrlForWeather)
         .then((respone) => {
             const data = respone.json();
             return data;
