@@ -196,10 +196,20 @@ function removeNodes(nodeArray, numberOfNodesToRemove) {
     }
 }
 
-function searchForPlace(searchText = searchBarElement.value) {
+function selectValue(optionList) {
+    for (let i = 0; i < optionList.length; i++) {
+        optionList[i].addEventListener("click", () => {
+            searchBarElement.value = optionList[i].innerText;
+            runApiByCityName();
+            removeNodes(optionList, optionList.length);
+        });
+    }
+}
+
+function searchForPlace() {
     const searchBarContainerElement = document.querySelector(".search-bar-container");
 
-    //let searchText = searchBarElement.value;
+    let searchText = searchBarElement.value;
     const apiKey = "ECzcVm1vzmQ07xEB_0IwcVe-AlUPYOl9QxIz1NVSTG8";
     const api = `https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json?apiKey=${apiKey}&query=${searchText}&maxresults=4`;
 
@@ -220,25 +230,20 @@ function searchForPlace(searchText = searchBarElement.value) {
 
             suggestionElements = document.querySelectorAll(".suggestion");
 
+            selectValue(suggestionElements);
+
             for (let i = 0; i < suggestionElements.length; i++) {
                 suggestionElements[i].innerHTML = placeName(data.suggestions[i].address);
             }
 
-            for (let i = 0; i < suggestionElements.length; i++) {
-                suggestionElements[i].onclick = () => {
-                    searchBarElement.value = suggestionElements[i].innerText;
-                    runApiByCityName();
-                    removeNodes(suggestionElements, suggestionElements.length);
-                }
-            }
-            /* searchBarElement.onblur = () => {
-                 removeNodes(suggestionElements, suggestionElements.length);
-             }*/
+            searchBarElement.addEventListener("blur", () => {
+                selectValue(suggestionElements);
+            });
         });
 }
 
-setInterval(searchForPlace(), 1000);
-//searchBarElement.oninput = searchForPlace();
+searchBarElement.addEventListener("input", searchForPlace);
+searchBarElement.addEventListener("focus", searchForPlace);
 
 function runApiByCityName() {
     let searchText = searchBarElement.value;
