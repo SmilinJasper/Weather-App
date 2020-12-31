@@ -85,7 +85,7 @@ function displayWeather() {
     locationInfoElement.innerHTML = `<p>${weather.locationInfo}</p>`;
     weatherFeelsLikeElement.innerHTML = ` <p>Feels like <span>${weather.temperature.feels_like}°</span></p>`;
     humidityElement.innerHTML = `<p>Humidity <span>${weather.humidity}%</span></p>`;
-    precipitationElement.innerHTML = ` <p>Precipitation <span>${weather.precipitation}%</span></p>`;
+    precipitationElement.innerHTML = ` <p>Precipitation <span>${weather.precipitation*100}%</span></p>`;
     windSpeedElement.innerHTML = `<p>Wind <span>${weather.wind_speed} kmph</span></p>`
     dewPointElement.innerHTML = `Dew point <span>${weather.dew_point}°</span>`;
     visibilityElement.innerHTML = `Visibility <span>${weather.visibility} km</span>`;
@@ -191,13 +191,15 @@ function placeName(placeNameObject) {
 }
 
 function removeNodes(nodeArray, numberOfNodesToRemove) {
-    for (let i = 0; i == numberOfNodesToRemove; i++) { nodeArray[i].remove(); }
+    if (nodeArray.length > 0) {
+        for (let i = 0; i < numberOfNodesToRemove; i++) { nodeArray[i].remove(); }
+    }
 }
 
-searchBarElement.oninput = () => {
+function searchForPlace(searchText = searchBarElement.value) {
     const searchBarContainerElement = document.querySelector(".search-bar-container");
 
-    let searchText = searchBarElement.value;
+    //let searchText = searchBarElement.value;
     const apiKey = "ECzcVm1vzmQ07xEB_0IwcVe-AlUPYOl9QxIz1NVSTG8";
     const api = `https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json?apiKey=${apiKey}&query=${searchText}&maxresults=4`;
 
@@ -208,10 +210,7 @@ searchBarElement.oninput = () => {
 
             let suggestionElements = document.querySelectorAll(".suggestion");
 
-            if (suggestionElements[i] != undefined) {
-                console.log(true);
-                removeNodes(suggestionElements, suggestionElements.length);
-            }
+            removeNodes(suggestionElements, suggestionElements.length);
 
             for (let i = 0; i < data.suggestions.length; i++) {
                 const suggestion = document.createElement("div");
@@ -229,10 +228,17 @@ searchBarElement.oninput = () => {
                 suggestionElements[i].onclick = () => {
                     searchBarElement.value = suggestionElements[i].innerText;
                     runApiByCityName();
+                    removeNodes(suggestionElements, suggestionElements.length);
                 }
             }
+            /* searchBarElement.onblur = () => {
+                 removeNodes(suggestionElements, suggestionElements.length);
+             }*/
         });
 }
+
+setInterval(searchForPlace(), 1000);
+//searchBarElement.oninput = searchForPlace();
 
 function runApiByCityName() {
     let searchText = searchBarElement.value;
