@@ -107,6 +107,9 @@ function displayWeather() {
             switchUnit();
         }
     }
+
+    weatherAppContainerElement.style.gridTemplateRows = "250px 95px";
+    notificationElement.style.display = "none";
 }
 
 function runApi(lat, lon) {
@@ -180,11 +183,13 @@ function getLocationInfo(lat, lon) {
         });
 }
 
-function placeName(placeNameObject) {
-    if (placeNameObject.city) {
-        return `<p>${placeNameObject.city}, ${placeNameObject.state},${placeNameObject.country}</p>`;
-    } else if (placeNameObject.state) {
-        return `<p>${placeNameObject.state},${placeNameObject.country}</p>`;
+function displayPlaceName(placeNameObject) {
+    if (placeNameObject.hasOwnProperty("city") == true && placeNameObject.hasOwnProperty("state") == false) {
+        return `<p>${placeNameObject.city}, ${placeNameObject.country}</p>`;
+    } else if (placeNameObject.hasOwnProperty("city")) {
+        return `<p>${placeNameObject.city}, ${placeNameObject.country}</p>`;
+    } else if (placeNameObject.hasOwnProperty("state")) {
+        return `<p>${placeNameObject.state}, ${placeNameObject.country}</p>`;
     } else {
         return `<p>${placeNameObject.country}</p>`;
     }
@@ -233,11 +238,11 @@ function searchForPlace() {
             selectValue(suggestionElements);
 
             for (let i = 0; i < suggestionElements.length; i++) {
-                suggestionElements[i].innerHTML = placeName(data.suggestions[i].address);
+                suggestionElements[i].innerHTML = displayPlaceName(data.suggestions[i].address);
             }
 
-            searchBarElement.addEventListener("blur", () => {
-                selectValue(suggestionElements);
+            document.addEventListener("click", () => {
+                removeNodes(suggestionElements, suggestionElements.length);
             });
         });
 }

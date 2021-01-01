@@ -21,9 +21,9 @@ body {
 }
 
 .search-bar {
+    font-size: 20px;
     height: 36px;
     width: 531px;
-    font-size: 20px;
     padding: 1px 1px 3px 8px;
     border-top: 0px;
     border-bottom: 1px solid black;
@@ -56,7 +56,7 @@ body {
     position: absolute;
     left: 492px;
     height: 40px;
-    background: white;
+    background: transparent;
 }
 
 .search-button:hover {
@@ -69,10 +69,10 @@ body {
 }
 
 .suggestion {
+    font-size: 20px;
     background: white;
     height: 36px;
     width: 531px;
-    font-size: 20px;
     padding: 1px 1px 3px 8px;
     border-bottom: 1px solid black;
     border-left: 1px solid black;
@@ -317,11 +317,13 @@ body {
         border-top-right-radius: 3px;
     }
     .search-bar {
+        font-size: 16px;
         height: 25px;
         width: 300px;
-        font-size: 16px;
-        border: 3px solid transparent;
+        border: 0px;
+        border-bottom: 1px solid black;
         border-radius: 0px;
+        padding: 4px 1px 6px 8px;
     }
     .get-location {
         left: 232px;
@@ -344,6 +346,12 @@ body {
         height: 15px;
         width: 15px;
     }
+    .suggestion {
+        font-size: 16px;
+        border-left: 0px;
+        border-right: 0px;
+        height: 29px;
+    }
     .weather-app-container {
         display: block;
         width: 300px;
@@ -362,7 +370,8 @@ body {
         margin: -10px;
         font-size: 50px;
         font-weight: bold;
-        position: initial;
+        position: absolute;
+        left: 125px;
     }
     .temperature-value p {
         margin: 0px;
