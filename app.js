@@ -1,3 +1,5 @@
+// GET ALL REQUIRED ELEMENTS FROM HTML
+
 const getLocationElement = document.querySelector(".get-location");
 const searchBarElement = document.querySelector(".search-bar");
 const searchButtonElement = document.querySelector(".search-button");
@@ -17,11 +19,14 @@ const visibilityElement = document.querySelector(".visibility");
 const sunriseElement = document.querySelector(".sunrise");
 const sunsetElement = document.querySelector(".sunset");
 const chronologicalElements = document.querySelectorAll(".daily-data");
-
 const switchUnitElement = document.querySelector(".switch-unit");
+
+// APP CONSTANTS 
 
 const KELVIN = 273;
 const key = "7a75f753f5fbb12eda481588680cd087";
+
+// WEATHER INFO OBJECT
 
 const weather = {
     temperature: {
@@ -39,27 +44,30 @@ const weather = {
     }
 }
 
+// EVENT LISTENERS TO GET WEATHER INFO
 
-searchButtonElement.onclick = () => {
-    runApiByCityName();
-}
+searchButtonElement.addEventListener("click", () => {
+    getWeatherInfoByCityName(searchBarElement.value);
+});
 
 searchBarElement.addEventListener("keydown", (event) => {
     let key = event.keyCode;
     if (key == 13) {
-        runApiByCityName();
+        getWeatherInfoByCityName(searchBarElement.value);
     }
 });
 
-getLocationElement.onclick = () => {
+getLocationElement.addEventListener("click", () => {
     getLocation();
-}
+});
+
+// FUNCTION TO GET GEOLOCATION
 
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(getPosition, showError);
     } else {
-        weatherAppContainerElement.style.gridRowsTemplate = "auto 250px 95px";
+        weatherAppContainerElement.style.gridTemplateRows = "auto 250px 95px";
         notificationElement.style.display = "block";
         notificationElement.innerHTML = `Browser doesn't support Geolocation`;
     }
@@ -69,14 +77,18 @@ function getPosition(position) {
     let lat = position.coords.latitude;
     let lon = position.coords.longitude;
 
-    runApi(lat, lon);
+    getWeatherInfo(lat, lon);
 }
+
+// DISPLAY THE NOTIFICATION ELEMENT AND SHOW THE ERROR
 
 function showError(error) {
     weatherAppContainerElement.style.gridTemplateRows = "auto 250px 95px";
     notificationElement.style.display = "block";
     notificationElement.innerHTML = `${error.message}`;
 }
+
+// FUNCTION TO CHANGE HTML ELEMENT VALUES AND DISPLAY WEATHER INFO
 
 function displayWeather() {
     temperatureValueElement.innerHTML = `<p><span class="temperature-number">${weather.temperature.value}</span><span class="initial-unit">°C</span></p>`
@@ -98,21 +110,15 @@ function displayWeather() {
         chronologicalElements[i].children[2].innerHTML = `${weather.daily[i].max}° | ${weather.daily[i].min}°`;
     }
 
-    switchUnitElement.onclick = () => { switchUnit(); };
-
-    const temperatureNumberElement = document.querySelector(".temperature-number");
-
-    if (screen.width <= 758) {
-        temperatureNumberElement.onclick = () => {
-            switchUnit();
-        }
-    }
+    // TO NOT SHOW THE ERROR IF WEATHER IS DISPLAYED SUCCESSFULLY
 
     weatherAppContainerElement.style.gridTemplateRows = "250px 95px";
     notificationElement.style.display = "none";
 }
 
-function runApi(lat, lon) {
+// GET WEATHER INFO FROM API
+
+function getWeatherInfo(lat, lon) {
     const api = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${key}`;
 
     fetch(api)
@@ -121,7 +127,6 @@ function runApi(lat, lon) {
             return data;
         })
         .then((data) => {
-            console.log(data);
             weather.temperature.value = Math.floor(data.current.temp - KELVIN);
             weather.description = data.current.weather[0].description;
             weather.iconId = data.current.weather[0].icon;
@@ -166,6 +171,8 @@ function runApi(lat, lon) {
         });
 }
 
+// GET LOCATION INFO FROM API
+
 function getLocationInfo(lat, lon) {
     const api = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`;
 
@@ -183,15 +190,17 @@ function getLocationInfo(lat, lon) {
         });
 }
 
-function displayPlaceName(placeNameObject) {
-    if (placeNameObject.hasOwnProperty("city") == true && placeNameObject.hasOwnProperty("state") == false) {
-        return `<p>${placeNameObject.city}, ${placeNameObject.country}</p>`;
-    } else if (placeNameObject.hasOwnProperty("city")) {
-        return `<p>${placeNameObject.city}, ${placeNameObject.country}</p>`;
-    } else if (placeNameObject.hasOwnProperty("state")) {
-        return `<p>${placeNameObject.state}, ${placeNameObject.country}</p>`;
+// HELPER FUNCTIONS TO BE USED
+
+function displayOption(Object) {
+    if (Object.hasOwnProperty("city") == true && Object.hasOwnProperty("state") == false) {
+        return `<p>${Object.city}, ${Object.country}</p>`;
+    } else if (Object.hasOwnProperty("city")) {
+        return `<p>${Object.city}, ${Object.country}</p>`;
+    } else if (Object.hasOwnProperty("state")) {
+        return `<p>${Object.state}, ${Object.country}</p>`;
     } else {
-        return `<p>${placeNameObject.country}</p>`;
+        return `<p>${Object.country}</p>`;
     }
 }
 
@@ -201,20 +210,27 @@ function removeNodes(nodeArray, numberOfNodesToRemove) {
     }
 }
 
-function selectValue(optionList) {
-    for (let i = 0; i < optionList.length; i++) {
-        optionList[i].addEventListener("click", () => {
-            searchBarElement.value = optionList[i].innerText;
-            runApiByCityName();
-            removeNodes(optionList, optionList.length);
+function selectableOptions(placeOptionsList) {
+    for (let i = 0; i < placeOptionsList.length; i++) {
+        placeOptionsList[i].addEventListener("click", () => {
+            searchBarElement.value = placeOptionsList[i].innerText;
+            getWeatherInfoByCityName(searchBarElement.value);
+            removeNodes(placeOptionsList, placeOptionsList.length);
         });
     }
 }
 
+// SHOW LOCATION SUGGESTIONS WHEN SEARCHING USING API
+
 function searchForPlace() {
+    let searchText = searchBarElement.value;
+
+    if (searchText == "") {
+        return;
+    }
+
     const searchBarContainerElement = document.querySelector(".search-bar-container");
 
-    let searchText = searchBarElement.value;
     const apiKey = "ECzcVm1vzmQ07xEB_0IwcVe-AlUPYOl9QxIz1NVSTG8";
     const api = `https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json?apiKey=${apiKey}&query=${searchText}&maxresults=4`;
 
@@ -235,42 +251,50 @@ function searchForPlace() {
 
             suggestionElements = document.querySelectorAll(".suggestion");
 
-            selectValue(suggestionElements);
+            selectableOptions(suggestionElements);
 
             for (let i = 0; i < suggestionElements.length; i++) {
-                suggestionElements[i].innerHTML = displayPlaceName(data.suggestions[i].address);
+                suggestionElements[i].innerHTML = displayOption(data.suggestions[i].address);
             }
 
-            document.addEventListener("click", () => {
-                removeNodes(suggestionElements, suggestionElements.length);
-            });
+            document.addEventListener("click", () => { removeNodes(suggestionElements, suggestionElements.length); });
         });
 }
+
+// EVENT LISTNERS FOR SHOWING LOCATION SUGGESTIONS WHEN SEARCHING
 
 searchBarElement.addEventListener("input", searchForPlace);
 searchBarElement.addEventListener("focus", searchForPlace);
 
-function runApiByCityName() {
-    let searchText = searchBarElement.value;
-    const apiUrlForWeather = `http://api.openweathermap.org/data/2.5/weather?q=${searchText}&appid=7a75f753f5fbb12eda481588680cd087`;
+// GET WEATHER INFO FROM THE API BY CITY NAME SEARCHED FOR
 
-    fetch(apiUrlForWeather)
+function getWeatherInfoByCityName(searchText) {
+    const api = `http://api.openweathermap.org/data/2.5/weather?q=${searchText}&appid=7a75f753f5fbb12eda481588680cd087`;
+
+    fetch(api)
         .then((respone) => {
             const data = respone.json();
             return data;
         })
         .then((data) => {
-            console.log(data);
+            if (data.hasOwnProperty("message")) {
+                weatherAppContainerElement.style.gridTemplateRows = "auto 250px 95px";
+                notificationElement.style.display = "block";
+                notificationElement.innerHTML = `${data.message}`;
+                return;
+            }
+
             const lat = data.coord.lat;
             const lon = data.coord.lon;
             const coords = [lat, lon]
-            console.log(coords);
             return coords;
         })
         .then((coords) => {
-            runApi(coords[0], coords[1]);
+            getWeatherInfo(coords[0], coords[1]);
         })
 }
+
+// FUNCTION TO FIND DAY NAME USING DAY NUMBER
 
 function getDayName(dayNo) {
     switch (dayNo) {
@@ -297,16 +321,22 @@ function getDayName(dayNo) {
     }
 }
 
+//FUNCTION TO CONVERT THE TEMPERATURE UNIT
+
 function switchUnit() {
+    if (weather.temperature.value == undefined) {
+        return;
+    }
+
     if (weather.temperature.unit == "celcius") {
         weather.temperature.unit = "fahrenheit";
         temperatureValueElement.innerHTML = `<p><span class="temperature-number">${Math.floor(weather.temperature.value*1.8+32)}</span><span class="initial-unit">°F</span></p>`
         switchUnitElement.innerHTML = `°C`;
 
-        weatherFeelsLikeElement.innerHTML = ` <p>Feels like <span>${Math.floor(weather.temperature.feels_like*1.8+32)}°</span></p>`;
+        weatherFeelsLikeElement.innerHTML = `<p>Feels like <span>${Math.floor(weather.temperature.feels_like*1.8+32)}°</span></p>`;
         dewPointElement.innerHTML = `Dew point <span>${Math.floor(weather.dew_point*1.8+32)}°</span>`;
 
-        for (let i = 0; i <= 7; i++) {
+        for (let i = 0; i < chronologicalElements.length; i++) {
             chronologicalElements[i].children[2].innerHTML = `${Math.floor(weather.daily[i].max*1.8+32)}° | ${Math.floor(weather.daily[i].min*1.8+32)}°`;
         }
     } else {
@@ -316,10 +346,25 @@ function switchUnit() {
 
         weatherFeelsLikeElement.innerHTML = ` <p>Feels like <span>${weather.temperature.feels_like}°</span></p>`;
         dewPointElement.innerHTML = `Dew point <span>${weather.dew_point}°</span>`;
-        for (let i = 0; i <= 7; i++) {
+
+        for (let i = 0; i < chronologicalElements.length; i++) {
             chronologicalElements[i].children[2].innerHTML = `${weather.daily[i].max}° | ${weather.daily[i].min}°`;
         }
     }
 }
+
+// EVENT LISTENERS FOR SWITCHING TEMPERATURE UNIT
+
+switchUnitElement.addEventListener("click", () => { switchUnit(); });
+
+const temperatureNumberElement = document.querySelector(".temperature-number");
+
+if (screen.width <= 758) {
+    temperatureNumberElement.addEventListener("click", () => {
+        switchUnit();
+    });
+}
+
+// RUN GEOLOCATION FINDER WHEN APPLICATION IS RUN
 
 getLocation();
