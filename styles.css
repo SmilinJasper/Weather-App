@@ -318,24 +318,24 @@ body {
         border-left: 3px solid #344d03;
         border-right: 3px solid #344d03;
         border-top: 3px solid #344d03;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
     }
     .search-bar {
         font-size: 16px;
-        height: 25px;
+        height: 36px;
         width: 300px;
         border: 0px;
         border-bottom: 1px solid black;
         border-bottom-left-radius: 0px;
         border-bottom-right-radius: 0px;
-        padding: 4px 1px 6px 8px;
+        padding: 0px 0px 0px 8px;
     }
     .get-location {
         left: 232px;
         top: 0px;
-        height: 33px;
-        padding: 8px 8px 10px 8px;
+        height: 36px;
+        padding: 11px 8px 10px 8px;
     }
     .get-location img {
         height: 18px;
@@ -344,7 +344,7 @@ body {
     }
     .search-button {
         left: 266px;
-        height: 33px;
+        height: 36px;
         width: 34px;
         border: 0px;
     }
