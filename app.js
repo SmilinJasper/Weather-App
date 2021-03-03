@@ -286,7 +286,6 @@ function getWeatherInfoByCityName(searchText) {
                 notificationElement.innerHTML = `${data.message}`;
                 return;
             }
-
             const lat = data.coord.lat;
             const lon = data.coord.lon;
             const coords = [lat, lon]
@@ -294,7 +293,7 @@ function getWeatherInfoByCityName(searchText) {
         })
         .then((coords) => {
             if (coords) getWeatherInfo(coords[0], coords[1]);
-        })
+        });
 }
 
 // FUNCTION TO FIND DAY NAME USING DAY NUMBER
