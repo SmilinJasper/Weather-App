@@ -272,7 +272,7 @@ searchBarElement.addEventListener("focus", searchForPlace);
 // GET WEATHER INFO FROM THE API BY CITY NAME SEARCHED FOR
 
 function getWeatherInfoByCityName(searchText) {
-    const api = `http://api.openweathermap.org/data/2.5/weather?q=${searchText}&appid=${key}`;
+    const api = `https://api.openweathermap.org/data/2.5/weather?q=${searchText}&appid=${key}`;
 
     fetch(api)
         .then((respone) => {
