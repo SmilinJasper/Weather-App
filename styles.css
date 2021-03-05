@@ -420,7 +420,10 @@ body {
         font-weight: normal;
         text-align: center;
         position: relative;
-        top: -355px;
+        top: -365px;
+    }
+    .location-info p {
+        line-height: normal;
     }
     .extra-weather-info-container {
         height: 120px;
