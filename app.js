@@ -68,8 +68,8 @@ function getLocation() {
         navigator.geolocation.getCurrentPosition(getPosition, showError);
     } else {
         weatherAppContainerElement.style.gridTemplateRows = "auto 250px 95px";
-        notificationElement.style.display = "block";
         notificationElement.innerHTML = `Browser doesn't support Geolocation`;
+        notificationElement.style.display = "block";
     }
 }
 
@@ -84,8 +84,8 @@ function getPosition(position) {
 
 function showError(error) {
     weatherAppContainerElement.style.gridTemplateRows = "auto 250px 95px";
-    notificationElement.style.display = "block";
     notificationElement.innerHTML = `${error.message}`;
+    notificationElement.style.display = "block";
 }
 
 // FUNCTION TO CHANGE HTML ELEMENT VALUES AND DISPLAY WEATHER INFO
@@ -259,7 +259,7 @@ function searchForPlace() {
 
             document.addEventListener("click", () => {
                 removeNodes(suggestionElements, suggestionElements.length);
-                searchBarElement.style.borderRadius = "8px";
+                if (window.innerWidth > 758) searchBarElement.style.borderRadius = "8px";
             });
         });
 }
@@ -282,8 +282,8 @@ function getWeatherInfoByCityName(searchText) {
         .then((data) => {
             if (data.hasOwnProperty("message")) {
                 weatherAppContainerElement.style.gridTemplateRows = "auto 250px 95px";
-                notificationElement.style.display = "block";
                 notificationElement.innerHTML = `${data.message}`;
+                notificationElement.style.display = "block";
                 return;
             }
             const lat = data.coord.lat;
