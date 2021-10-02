@@ -13,9 +13,11 @@
 <body>
     <div class="content-wrapper">
         <div class="search-bar-container">
-            <input class="search-bar" type="text" placeholder="Enter Location">
-            <button class="get-location"><img src="icons/gun-target.png"></button>
-            <button class="search-button"><img src="icons/search-icon.png"></button>
+            <input class="search-bar" type="text" placeholder="Enter Location" tabindex="0" aria-labelledby="search-button">
+            <button id="get-location" class="get-location" aria-label="Get Location" tabindex="0"><img
+                    src="icons/gun-target.png" aria-labelledby="get-location"></button>
+            <button id="search-button" class="search-button" aria-label="Search" tabindex="0"><img
+                    src="icons/search-icon.png" aria-labelledby="search-button"></button>
         </div>
         <div class="weather-app-container">
             <div class="notification">
@@ -27,7 +29,7 @@
                     <div class="temperature-value">
                         <p><span class="temperature-number">-</span><span class="initial-unit">°C</span></p>
                     </div>
-                    <span class="switch-unit">°F</span>
+                    <button class="switch-unit" tabindex="0">°F</button>
                 </div>
             </div>
             <div class="weather-info-container">
