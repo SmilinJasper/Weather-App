@@ -45,9 +45,29 @@ body {
     outline: 0px;
 }
 
+.get-location:focus {
+    outline: 1px solid #2885c7;
+    background: whitesmoke;
+}
+
 .get-location:hover {
     background: whitesmoke;
     cursor: pointer;
+}
+
+@supports selector(:focus-visible) {
+    .get-location:focus {
+        outline: none;
+        background: white;
+    }
+    .get-location:focus-visible {
+        outline: 1px solid #2885c7;
+        background: whitesmoke;
+    }
+    .get-location:hover {
+        background: whitesmoke;
+        cursor: pointer;
+    }
 }
 
 .get-location img {
