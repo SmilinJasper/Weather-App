@@ -88,10 +88,29 @@ body {
     outline: 0px;
 }
 
-.search-button:hover,
 .search-button:focus {
+    outline: 1px solid #2885c7;
+    background: whitesmoke;
+}
+
+.search-button:hover {
     background: whitesmoke;
     cursor: pointer;
+}
+
+@supports selector(:focus-visible) {
+    .search-button:focus {
+        outline: none;
+        background: white;
+    }
+    .search-button:focus-visible {
+        outline: 1px solid #2885c7;
+        background: whitesmoke;
+    }
+    .search-button:hover {
+        background: whitesmoke;
+        cursor: pointer;
+    }
 }
 
 .search-button img {
