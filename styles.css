@@ -230,27 +230,11 @@ body {
     line-height: 1em;
 }
 
-.weather-feels-like {
-    color: gray;
+.weather-info-label {
+    color: #6f6f6f;
 }
 
-.weather-feels-like span {
-    color: black;
-}
-
-.humidity {
-    color: gray;
-}
-
-.humidity span {
-    color: black;
-}
-
-.precipitation {
-    color: gray;
-}
-
-.precipitation span {
+.weather-info-label span {
     color: black;
 }
 
@@ -258,12 +242,7 @@ body {
     position: relative;
 }
 
-.wind-speed {
-    color: gray;
-}
-
 .wind-speed span {
-    color: black;
     position: relative;
     left: 23px;
 }
@@ -292,38 +271,6 @@ body {
     background: whitesmoke;
     padding: 110px 0px 0px 8px;
     line-height: 2em;
-}
-
-.dew-point {
-    color: gray;
-}
-
-.dew-point span {
-    color: black;
-}
-
-.visibility {
-    color: gray;
-}
-
-.visibility span {
-    color: black;
-}
-
-.sunrise {
-    color: gray;
-}
-
-.sunrise span {
-    color: black;
-}
-
-.sunset {
-    color: gray;
-}
-
-.sunset span {
-    color: black;
 }
 
 .chronological-data {
