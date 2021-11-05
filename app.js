@@ -92,7 +92,7 @@ function showError(error) {
 
 function displayWeather() {
     temperatureValueElement.innerHTML = `<p><span class="temperature-number">${weather.temperature.value}</span><span class="initial-unit">°C</span></p>`
-    weatherIconElement.innerHTML = `<img src="icons/${weather.iconId}.png"></img>`
+    weatherIconElement.innerHTML = `<img src="icons/${weather.iconId}.png" alt="${weather.description}"></img>`
     weatherDescriptionElement.innerHTML = ` <p>${weather.description}</p>`;
     locationInfoElement.innerHTML = `<p>${weather.locationInfo}</p>`;
     weatherFeelsLikeElement.innerHTML = ` <p>Feels like <span>${weather.temperature.feels_like}°</span></p>`;
@@ -106,7 +106,7 @@ function displayWeather() {
 
     for (let i = 0; i <= 7; i++) {
         chronologicalElements[i].children[0].innerHTML = `${weather.daily[i].name}`;
-        chronologicalElements[i].children[1].innerHTML = `<img src="icons/${weather.daily[i].icon}.png">`;
+        chronologicalElements[i].children[1].innerHTML = `<img src="icons/${weather.daily[i].icon}.png" alt="${weather.daily[i].description}">`;
         chronologicalElements[i].children[2].innerHTML = `${weather.daily[i].max}° | ${weather.daily[i].min}°`;
     }
 
@@ -166,6 +166,7 @@ function getWeatherInfo(lat, lon) {
                 weather.daily[i].icon = data.daily[i].weather[0].icon;
                 weather.daily[i].min = Math.floor(data.daily[i].temp.min - KELVIN);
                 weather.daily[i].max = Math.floor(data.daily[i].temp.max - KELVIN);
+                weather.daily[i].description = data.daily[i].weather[0].description;
             }
             getLocationInfo(lat, lon);
         });
