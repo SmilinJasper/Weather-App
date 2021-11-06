@@ -225,7 +225,7 @@ function createSelectableOptions(placeOptionsList) {
 
 // SHOW LOCATION SUGGESTIONS WHEN SEARCHING USING API
 
-function searchForPlace() {
+function addLocationSearchSuggestions() {
     let searchText = searchBarElement.value;
 
     if (searchText == "") {
@@ -262,12 +262,12 @@ function searchForPlace() {
 
 // EVENT LISTNERS FOR SHOWING LOCATION SUGGESTIONS WHEN SEARCHING
 
-searchBarElement.addEventListener("input", searchForPlace);
-searchBarElement.addEventListener("focus", searchForPlace);
+searchBarElement.addEventListener("input", addLocationSearchSuggestions);
+searchBarElement.addEventListener("focus", addLocationSearchSuggestions);
 
 // REMOVE LOCATION SUGGESTIONS WHEN FOCUS IS LOST FROM SEARCH BAR
 
-function removeLocationSuggestions() {
+function removeLocationSearchSuggestions() {
     let suggestionElements = document.querySelectorAll(".suggestion");
 
     if (suggestionElements) {
@@ -276,7 +276,7 @@ function removeLocationSuggestions() {
     }
 }
 
-searchBarElement.addEventListener("blur", removeLocationSuggestions);
+searchBarElement.addEventListener("blur", removeLocationSearchSuggestions);
 
 // GET WEATHER INFO FROM THE API BY CITY NAME SEARCHED FOR
 
