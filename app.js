@@ -257,11 +257,6 @@ function searchForPlace() {
             for (let i = 0; i < suggestionElements.length; i++) {
                 suggestionElements[i].innerHTML = displayOption(data.suggestions[i].address);
             }
-
-            document.addEventListener("click", () => {
-                removeNodes(suggestionElements, suggestionElements.length);
-                if (window.innerWidth > 758) searchBarElement.style.borderRadius = "8px";
-            });
         });
 }
 
@@ -269,6 +264,19 @@ function searchForPlace() {
 
 searchBarElement.addEventListener("input", searchForPlace);
 searchBarElement.addEventListener("focus", searchForPlace);
+
+// REMOVE LOCATION SUGGESTIONS WHEN FOCUS IS LOST FROM SEARCH BAR
+
+function removeLocationSuggestions() {
+    let suggestionElements = document.querySelectorAll(".suggestion");
+
+    if (suggestionElements) {
+        removeNodes(suggestionElements, suggestionElements.length);
+        if (window.innerWidth > 758) searchBarElement.style.borderRadius = "8px";
+    }
+}
+
+searchBarElement.addEventListener("blur", removeLocationSuggestions);
 
 // GET WEATHER INFO FROM THE API BY CITY NAME SEARCHED FOR
 
