@@ -215,7 +215,7 @@ function createSelectableOptions(placeOptionsList) {
     searchBarElement.style.borderBottomRightRadius = "0px";
 
     for (let i = 0; i < placeOptionsList.length; i++) {
-        placeOptionsList[i].addEventListener("click", () => {
+        placeOptionsList[i].addEventListener("mousedown", () => {
             searchBarElement.value = placeOptionsList[i].innerText;
             getWeatherInfoByCityName(searchBarElement.value);
             removeNodes(placeOptionsList, placeOptionsList.length);
