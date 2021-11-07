@@ -21,6 +21,11 @@ const sunsetElement = document.querySelector(".sunset");
 const chronologicalElements = document.querySelectorAll(".daily-data");
 const switchUnitElement = document.querySelector(".switch-unit");
 
+
+// VARIABLE TO DECIDE WHETHER TO GET WEATHER OF USER LOCATION
+
+let isSearchSuggestionClicked = false;
+
 // APP CONSTANTS 
 
 const KELVIN = 273;
@@ -216,6 +221,7 @@ function createSelectableOptions(placeOptionsList) {
 
     for (let i = 0; i < placeOptionsList.length; i++) {
         placeOptionsList[i].addEventListener("mousedown", () => {
+            isSearchSuggestionClicked = true;
             searchBarElement.value = placeOptionsList[i].innerText;
             getWeatherInfoByCityName(searchBarElement.value);
             removeNodes(placeOptionsList, placeOptionsList.length);
@@ -378,4 +384,4 @@ if (screen.width <= 758) {
 
 // RUN GEOLOCATION FINDER WHEN APPLICATION IS RUN
 
-getLocation();
+if (!isSearchSuggestionClicked) getLocation();
