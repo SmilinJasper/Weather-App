@@ -25,6 +25,7 @@ const switchUnitElement = document.querySelector(".switch-unit");
 // VARIABLE TO DECIDE WHETHER TO GET WEATHER OF USER LOCATION
 
 let isSearchSuggestionClicked = false;
+let searchBarIsFocused = false;
 
 // APP CONSTANTS 
 
@@ -232,11 +233,10 @@ function createSelectableOptions(placeOptionsList) {
 // SHOW LOCATION SUGGESTIONS WHEN SEARCHING USING API
 
 function addLocationSearchSuggestions() {
+    searchBarIsFocused = true;
     let searchText = searchBarElement.value;
 
-    if (searchText == "") {
-        return;
-    }
+    if (searchText == "") return;
 
     const searchBarContainerElement = document.querySelector(".search-bar-container");
 
@@ -246,22 +246,24 @@ function addLocationSearchSuggestions() {
     fetch(api)
         .then(response => response.json())
         .then((data) => {
-            let suggestionElements = document.querySelectorAll(".suggestion");
+            if (searchBarIsFocused) {
+                let suggestionElements = document.querySelectorAll(".suggestion");
 
-            removeNodes(suggestionElements, suggestionElements.length);
+                removeNodes(suggestionElements, suggestionElements.length);
 
-            for (let i = 0; i < data.suggestions.length; i++) {
-                const suggestion = document.createElement("div");
-                suggestion.className = "suggestion";
-                searchBarContainerElement.append(suggestion);
-            }
+                for (let i = 0; i < data.suggestions.length; i++) {
+                    const suggestion = document.createElement("div");
+                    suggestion.className = "suggestion";
+                    searchBarContainerElement.append(suggestion);
+                }
 
-            suggestionElements = document.querySelectorAll(".suggestion");
+                suggestionElements = document.querySelectorAll(".suggestion");
 
-            createSelectableOptions(suggestionElements);
+                createSelectableOptions(suggestionElements);
 
-            for (let i = 0; i < suggestionElements.length; i++) {
-                suggestionElements[i].innerHTML = displayOption(data.suggestions[i].address);
+                for (let i = 0; i < suggestionElements.length; i++) {
+                    suggestionElements[i].innerHTML = displayOption(data.suggestions[i].address);
+                }
             }
         });
 }
@@ -274,6 +276,7 @@ searchBarElement.addEventListener("focus", addLocationSearchSuggestions);
 // REMOVE LOCATION SUGGESTIONS WHEN FOCUS IS LOST FROM SEARCH BAR
 
 function removeLocationSearchSuggestions() {
+    searchBarIsFocused = false;
     let suggestionElements = document.querySelectorAll(".suggestion");
 
     if (suggestionElements) {
