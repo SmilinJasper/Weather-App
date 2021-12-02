@@ -16,8 +16,13 @@ body {
     position: absolute;
     top: 5%;
     left: 50%;
+    border-radius: 8px;
     transform: translateX(-50%);
     z-index: 1;
+}
+
+.search-bar-container:focus-within {
+    outline: 3px solid #486905;
 }
 
 .search-bar {
@@ -29,10 +34,6 @@ body {
     border: 0px;
     border-radius: 6px;
     outline: 0px;
-}
-
-.search-bar:focus {
-    outline: 3px solid #486905;
 }
 
 .suggestion:last-child {
