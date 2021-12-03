@@ -24,7 +24,7 @@ const switchUnitElement = document.querySelector(".switch-unit");
 
 // VARIABLE TO DECIDE WHETHER TO GET WEATHER OF USER LOCATION
 
-let isSearchSuggestionClicked = false;
+let searchSuggestionIsClicked = false;
 let searchBarIsFocused = false;
 
 // APP CONSTANTS 
@@ -32,7 +32,7 @@ let searchBarIsFocused = false;
 const KELVIN = 273;
 const key = "2f5cb98dbd931c10023726a1875dabf7";
 
-// WEATHER INFO OBJECT
+// WEATHER INFO address
 
 const weather = {
     temperature: {
@@ -198,15 +198,15 @@ function getLocationInfo(lat, lon) {
 
 // HELPER FUNCTIONS TO BE USED
 
-function displayOption(Object) {
-    if (Object.hasOwnProperty("city") == true && Object.hasOwnProperty("state") == false) {
-        return `<p>${Object.city}, ${Object.country}</p>`;
-    } else if (Object.hasOwnProperty("city")) {
-        return `<p>${Object.city}, ${Object.country}</p>`;
-    } else if (Object.hasOwnProperty("state")) {
-        return `<p>${Object.state}, ${Object.country}</p>`;
+function displayLocationSearchSuggestions(address) {
+    if (address.hasOwnProperty("city") == true && address.hasOwnProperty("state") == false) {
+        return `<p>${address.city}, ${address.country}</p>`;
+    } else if (address.hasOwnProperty("city")) {
+        return `<p>${address.city}, ${address.country}</p>`;
+    } else if (address.hasOwnProperty("state")) {
+        return `<p>${address.state}, ${address.country}</p>`;
     } else {
-        return `<p>${Object.country}</p>`;
+        return `<p>${address.country}</p>`;
     }
 }
 
@@ -216,16 +216,16 @@ function removeNodes(nodeArray, numberOfNodesToRemove) {
     }
 }
 
-function createSelectableOptions(placeOptionsList) {
+function makeLocationSearchSuggestionsSelectable(searchSuggestions) {
     searchBarElement.style.borderBottomLeftRadius = "0px";
     searchBarElement.style.borderBottomRightRadius = "0px";
 
-    for (let i = 0; i < placeOptionsList.length; i++) {
-        placeOptionsList[i].addEventListener("mousedown", () => {
-            isSearchSuggestionClicked = true;
-            searchBarElement.value = placeOptionsList[i].innerText;
+    for (let i = 0; i < searchSuggestions.length; i++) {
+        searchSuggestions[i].addEventListener("mousedown", () => {
+            searchSuggestionIsClicked = true;
+            searchBarElement.value = searchSuggestions[i].innerText;
             getWeatherInfoByCityName(searchBarElement.value);
-            removeNodes(placeOptionsList, placeOptionsList.length);
+            removeNodes(searchSuggestions, searchSuggestions.length);
         });
     }
 }
@@ -259,10 +259,10 @@ function addLocationSearchSuggestions() {
 
                 suggestionElements = document.querySelectorAll(".suggestion");
 
-                createSelectableOptions(suggestionElements);
+                makeLocationSearchSuggestionsSelectable(suggestionElements);
 
                 for (let i = 0; i < suggestionElements.length; i++) {
-                    suggestionElements[i].innerHTML = displayOption(data.suggestions[i].address);
+                    suggestionElements[i].innerHTML = displayLocationSearchSuggestions(data.suggestions[i].address);
                 }
             }
         });
@@ -387,4 +387,4 @@ if (screen.width <= 758) {
 
 // RUN GEOLOCATION FINDER WHEN APPLICATION IS RUN
 
-if (!isSearchSuggestionClicked) getLocation();
+if (!searchSuggestionIsClicked) getLocation();
