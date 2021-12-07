@@ -53,13 +53,13 @@ const weather = {
 // EVENT LISTENERS TO GET WEATHER INFO
 
 searchButtonElement.addEventListener("click", () => {
-    getWeatherInfoByCityName(searchBarElement.value);
+    getWeatherInfoBySearchedLocation(searchBarElement.value);
 });
 
 searchBarElement.addEventListener("keydown", (event) => {
     let key = event.keyCode;
     if (key == 13) {
-        getWeatherInfoByCityName(searchBarElement.value);
+        getWeatherInfoBySearchedLocation(searchBarElement.value);
     }
 });
 
@@ -127,55 +127,57 @@ function displayWeather() {
 function getWeatherInfo(lat, lon) {
     const api = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${key}`;
 
-    fetch(api)
-        .then((response) => {
-            const data = response.json();
-            return data;
-        })
-        .then((data) => {
-            weather.temperature.value = Math.floor(data.current.temp - KELVIN);
-            weather.description = data.current.weather[0].description;
-            weather.iconId = data.current.weather[0].icon;
-            weather.temperature.feels_like = Math.floor(data.current.feels_like - KELVIN);
-            weather.humidity = data.current.humidity;
-            weather.precipitation = data.hourly[0].pop;
+    const callWeatherInfoApi = async() => {
+        const request = await fetch(api);
+        const data = await request.json();
+        return data;
+    };
 
-            const windDirection = data.current.wind_deg;
-            windDirectionElement.style.transform = `rotateZ(${windDirection}deg)`;
+    callWeatherInfoApi().then((data) => {
+        weather.temperature.value = Math.floor(data.current.temp - KELVIN);
+        weather.description = data.current.weather[0].description;
+        weather.iconId = data.current.weather[0].icon;
+        weather.temperature.feels_like = Math.floor(data.current.feels_like - KELVIN);
+        weather.humidity = data.current.humidity;
+        weather.precipitation = data.hourly[0].pop;
 
-            weather.wind_speed = data.current.wind_speed;
-            weather.dew_point = Math.floor(data.current.dew_point - KELVIN);
-            weather.visibility = data.current.visibility / 1000;
+        const windDirection = data.current.wind_deg;
+        windDirectionElement.style.transform = `rotateZ(${windDirection}deg)`;
 
-            const sunriseJsTime = new Date(data.current.sunrise * 1000);
-            const sunriseHours = sunriseJsTime.getHours();
-            const sunriseMins = sunriseJsTime.getMinutes();
+        weather.wind_speed = data.current.wind_speed;
+        weather.dew_point = Math.floor(data.current.dew_point - KELVIN);
+        weather.visibility = data.current.visibility / 1000;
 
-            const sunsetJsTime = new Date(data.current.sunset * 1000);
-            const sunsetHours = sunsetJsTime.getHours() - 12;
-            const sunsetMins = sunsetJsTime.getMinutes();
+        const sunriseJsTime = new Date(data.current.sunrise * 1000);
+        const sunriseHours = sunriseJsTime.getHours();
+        const sunriseMins = sunriseJsTime.getMinutes();
 
-            const sunriseTime = `${sunriseHours}:${sunriseMins}AM`;
-            const sunsetTime = `${sunsetHours}:${sunsetMins}PM`;
+        const sunsetJsTime = new Date(data.current.sunset * 1000);
+        const sunsetHours = sunsetJsTime.getHours() - 12;
+        const sunsetMins = sunsetJsTime.getMinutes();
 
-            weather.sunrise = sunriseTime;
-            weather.sunset = sunsetTime;
+        const sunriseTime = `${sunriseHours}:${sunriseMins}AM`;
+        const sunsetTime = `${sunsetHours}:${sunsetMins}PM`;
 
-            const dayNames = [];
+        weather.sunrise = sunriseTime;
+        weather.sunset = sunsetTime;
 
-            for (let i = 0; i <= 7; i++) {
-                let day;
-                day = new Date(data.daily[i].dt * 1000);
-                dayNames.push(getDayName(day.getDay()));
+        const dayNames = [];
 
-                weather.daily[i].name = dayNames[i];
-                weather.daily[i].icon = data.daily[i].weather[0].icon;
-                weather.daily[i].min = Math.floor(data.daily[i].temp.min - KELVIN);
-                weather.daily[i].max = Math.floor(data.daily[i].temp.max - KELVIN);
-                weather.daily[i].description = data.daily[i].weather[0].description;
-            }
-            getLocationInfo(lat, lon);
-        });
+        for (let i = 0; i <= 7; i++) {
+            let day;
+            day = new Date(data.daily[i].dt * 1000);
+            dayNames.push(getDayName(day.getDay()));
+
+            weather.daily[i].name = dayNames[i];
+            weather.daily[i].icon = data.daily[i].weather[0].icon;
+            weather.daily[i].min = Math.floor(data.daily[i].temp.min - KELVIN);
+            weather.daily[i].max = Math.floor(data.daily[i].temp.max - KELVIN);
+            weather.daily[i].description = data.daily[i].weather[0].description;
+        }
+
+        getLocationInfo(lat, lon);
+    });
 }
 
 // GET LOCATION INFO FROM API
@@ -183,14 +185,13 @@ function getWeatherInfo(lat, lon) {
 function getLocationInfo(lat, lon) {
     const api = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`;
 
-    fetch(api)
-        .then((response) => {
-            const data = response.json();
-            return data;
-        })
-        .then((data) => {
-            weather.locationInfo = `${data.name}, ${data.sys.country}`;
-        })
+    const callLocationApi = async() => {
+        const request = await fetch(api);
+        const data = await request.json();
+        return data;
+    };
+
+    callLocationApi().then((data) => weather.locationInfo = `${data.name}, ${data.sys.country}`)
         .then(() => {
             displayWeather();
         });
@@ -224,7 +225,7 @@ function makeLocationSearchSuggestionsSelectable(searchSuggestions) {
         searchSuggestions[i].addEventListener("mousedown", () => {
             searchSuggestionIsClicked = true;
             searchBarElement.value = searchSuggestions[i].innerText;
-            getWeatherInfoByCityName(searchBarElement.value);
+            getWeatherInfoBySearchedLocation(searchBarElement.value);
             removeNodes(searchSuggestions, searchSuggestions.length);
         });
     }
@@ -234,38 +235,42 @@ function makeLocationSearchSuggestionsSelectable(searchSuggestions) {
 
 function addLocationSearchSuggestions() {
     searchBarIsFocused = true;
-    let searchText = searchBarElement.value;
+    let searchedLocation = searchBarElement.value;
 
-    if (searchText == "") return;
+    if (searchedLocation == "") return;
 
     const searchBarContainerElement = document.querySelector(".search-bar-container");
 
     const apiKey = "ECzcVm1vzmQ07xEB_0IwcVe-AlUPYOl9QxIz1NVSTG8";
-    const api = `https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json?apiKey=${apiKey}&query=${searchText}&maxresults=4`;
+    const api = `https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json?apiKey=${apiKey}&query=${searchedLocation}&maxresults=4`;
 
-    fetch(api)
-        .then(response => response.json())
-        .then((data) => {
-            if (searchBarIsFocused) {
-                let suggestionElements = document.querySelectorAll(".suggestion");
+    const getLocationSuggestions = async() => {
+        const request = await fetch(api);
+        const data = await request.json();
+        return data;
+    };
 
-                removeNodes(suggestionElements, suggestionElements.length);
+    getLocationSuggestions().then((data) => {
+        if (searchBarIsFocused) {
+            let suggestionElements = document.querySelectorAll(".suggestion");
 
-                for (let i = 0; i < data.suggestions.length; i++) {
-                    const suggestion = document.createElement("div");
-                    suggestion.className = "suggestion";
-                    searchBarContainerElement.append(suggestion);
-                }
+            removeNodes(suggestionElements, suggestionElements.length);
 
-                suggestionElements = document.querySelectorAll(".suggestion");
-
-                makeLocationSearchSuggestionsSelectable(suggestionElements);
-
-                for (let i = 0; i < suggestionElements.length; i++) {
-                    suggestionElements[i].innerHTML = displayLocationSearchSuggestions(data.suggestions[i].address);
-                }
+            for (let i = 0; i < data.suggestions.length; i++) {
+                const suggestion = document.createElement("div");
+                suggestion.className = "suggestion";
+                searchBarContainerElement.append(suggestion);
             }
-        });
+
+            suggestionElements = document.querySelectorAll(".suggestion");
+
+            makeLocationSearchSuggestionsSelectable(suggestionElements);
+
+            for (let i = 0; i < suggestionElements.length; i++) {
+                suggestionElements[i].innerHTML = displayLocationSearchSuggestions(data.suggestions[i].address);
+            }
+        }
+    });
 }
 
 // EVENT LISTNERS FOR SHOWING LOCATION SUGGESTIONS WHEN SEARCHING
@@ -289,14 +294,16 @@ searchBarElement.addEventListener("blur", removeLocationSearchSuggestions);
 
 // GET WEATHER INFO FROM THE API BY CITY NAME SEARCHED FOR
 
-function getWeatherInfoByCityName(searchText) {
-    const api = `https://api.openweathermap.org/data/2.5/weather?q=${searchText}&appid=${key}`;
+function getWeatherInfoBySearchedLocation(searchedLocation) {
+    const api = `https://api.openweathermap.org/data/2.5/weather?q=${searchedLocation}&appid=${key}`;
 
-    fetch(api)
-        .then((respone) => {
-            const data = respone.json();
-            return data;
-        })
+    const getCoordinatesOfSearchedLocation = async() => {
+        const request = await fetch(api);
+        const data = await request.json();
+        return data;
+    }
+
+    getCoordinatesOfSearchedLocation()
         .then((data) => {
             if (data.hasOwnProperty("message")) {
                 weatherAppContainerElement.style.gridTemplateRows = "auto 250px 95px";
