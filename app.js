@@ -185,13 +185,13 @@ function getWeatherInfo(lat, lon) {
 function getLocationInfo(lat, lon) {
     const api = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}`;
 
-    const callLocationApi = async() => {
+    const callLocationInfoApi = async() => {
         const request = await fetch(api);
         const data = await request.json();
         return data;
     };
 
-    callLocationApi().then((data) => weather.locationInfo = `${data.name}, ${data.sys.country}`)
+    callLocationInfoApi().then((data) => weather.locationInfo = `${data.name}, ${data.sys.country}`)
         .then(() => {
             displayWeather();
         });
@@ -251,25 +251,26 @@ function addLocationSearchSuggestions() {
     };
 
     getLocationSuggestions().then((data) => {
-        if (searchBarIsFocused) {
-            let suggestionElements = document.querySelectorAll(".suggestion");
+        if (!searchBarIsFocused) return
 
-            removeNodes(suggestionElements, suggestionElements.length);
+        let suggestionElements = document.querySelectorAll(".suggestion");
 
-            for (let i = 0; i < data.suggestions.length; i++) {
-                const suggestion = document.createElement("div");
-                suggestion.className = "suggestion";
-                searchBarContainerElement.append(suggestion);
-            }
+        removeNodes(suggestionElements, suggestionElements.length);
 
-            suggestionElements = document.querySelectorAll(".suggestion");
-
-            makeLocationSearchSuggestionsSelectable(suggestionElements);
-
-            for (let i = 0; i < suggestionElements.length; i++) {
-                suggestionElements[i].innerHTML = displayLocationSearchSuggestions(data.suggestions[i].address);
-            }
+        for (let i = 0; i < data.suggestions.length; i++) {
+            const suggestion = document.createElement("div");
+            suggestion.className = "suggestion";
+            searchBarContainerElement.append(suggestion);
         }
+
+        suggestionElements = document.querySelectorAll(".suggestion");
+
+        makeLocationSearchSuggestionsSelectable(suggestionElements);
+
+        for (let i = 0; i < suggestionElements.length; i++) {
+            suggestionElements[i].innerHTML = displayLocationSearchSuggestions(data.suggestions[i].address);
+        }
+
     });
 }
 
@@ -284,10 +285,11 @@ function removeLocationSearchSuggestions() {
     searchBarIsFocused = false;
     let suggestionElements = document.querySelectorAll(".suggestion");
 
-    if (suggestionElements) {
-        removeNodes(suggestionElements, suggestionElements.length);
-        if (window.innerWidth > 758) searchBarElement.style.borderRadius = "8px";
-    }
+    if (!suggestionElements) return
+
+    removeNodes(suggestionElements, suggestionElements.length);
+    if (window.innerWidth > 758) searchBarElement.style.borderRadius = "8px";
+
 }
 
 searchBarElement.addEventListener("blur", removeLocationSearchSuggestions);
@@ -351,9 +353,7 @@ function getDayName(dayNo) {
 //FUNCTION TO CONVERT THE TEMPERATURE UNIT
 
 function switchUnit() {
-    if (weather.temperature.value == undefined) {
-        return;
-    }
+    if (weather.temperature.value == undefined) return;
 
     if (weather.temperature.unit == "celcius") {
         weather.temperature.unit = "fahrenheit";
