@@ -21,6 +21,9 @@ const sunsetElement = document.querySelector(".sunset");
 const chronologicalElements = document.querySelectorAll(".daily-data");
 const switchUnitElement = document.querySelector(".switch-unit");
 
+// VARIABLE TO STORE CUURENT TEMPERATURE UNIT TO BASE SWITCHING UNIT OFF
+
+let unitInUse = "celcius";
 
 // VARIABLE TO DECIDE WHETHER TO GET WEATHER OF USER LOCATION
 
@@ -32,7 +35,7 @@ let searchBarIsFocused = false;
 const KELVIN = 273;
 const key = "2f5cb98dbd931c10023726a1875dabf7";
 
-// WEATHER INFO address
+// WEATHER INFO OBJECT WITH VALUES IN CELCIUS
 
 const weather = {
     temperature: {
@@ -49,6 +52,10 @@ const weather = {
         7: []
     }
 }
+
+// WEATHER INFO OBJECT WITH VALUES IN FAHRENHEIT
+
+const weatherInFahrenheit = JSON.parse(JSON.stringify(weather));
 
 // EVENT LISTENERS TO GET WEATHER INFO
 
@@ -174,7 +181,14 @@ function getWeatherInfo(lat, lon) {
             weather.daily[i].min = Math.floor(data.daily[i].temp.min - KELVIN);
             weather.daily[i].max = Math.floor(data.daily[i].temp.max - KELVIN);
             weather.daily[i].description = data.daily[i].weather[0].description;
+
+            weatherInFahrenheit.daily[i].min = Math.floor(weather.daily[i].min * 1.8 + 32);
+            weatherInFahrenheit.daily[i].max = Math.floor(weather.daily[i].max * 1.8 + 32);
         }
+
+        weatherInFahrenheit.temperature.value = Math.floor(weather.temperature.value * 1.8 + 32);
+        weatherInFahrenheit.temperature.feels_like = Math.floor(weather.temperature.feels_like * 1.8 + 32);
+        weatherInFahrenheit.dew_point = Math.floor(weather.dew_point * 1.8 + 32);
 
         getLocationInfo(lat, lon);
     });
@@ -355,28 +369,12 @@ function getDayName(dayNo) {
 function switchUnit() {
     if (weather.temperature.value == undefined) return;
 
-    if (weather.temperature.unit == "celcius") {
-        weather.temperature.unit = "fahrenheit";
-        temperatureValueElement.innerHTML = `<p><span class="temperature-number">${Math.floor(weather.temperature.value*1.8+32)}</span><span class="initial-unit">°F</span></p>`
-        switchUnitElement.innerHTML = `°C`;
-
-        weatherFeelsLikeElement.innerHTML = `<p>Feels like <span>${Math.floor(weather.temperature.feels_like*1.8+32)}°</span></p>`;
-        dewPointElement.innerHTML = `Dew point <span>${Math.floor(weather.dew_point*1.8+32)}°</span>`;
-
-        for (let i = 0; i < chronologicalElements.length; i++) {
-            chronologicalElements[i].children[2].innerHTML = `${Math.floor(weather.daily[i].max*1.8+32)}° | ${Math.floor(weather.daily[i].min*1.8+32)}°`;
-        }
+    if (unitInUse === "celcius") {
+        unitInUse = "fahrenheit";
+        displayWeather(weatherInFahrenheit);
     } else {
-        weather.temperature.unit = "celcius";
-        temperatureValueElement.innerHTML = `<p><span class="temperature-number">${weather.temperature.value}</span><span class="initial-unit">°C</span></p>`
-        switchUnitElement.innerHTML = `°F`;
-
-        weatherFeelsLikeElement.innerHTML = ` <p>Feels like <span>${weather.temperature.feels_like}°</span></p>`;
-        dewPointElement.innerHTML = `Dew point <span>${weather.dew_point}°</span>`;
-
-        for (let i = 0; i < chronologicalElements.length; i++) {
-            chronologicalElements[i].children[2].innerHTML = `${weather.daily[i].max}° | ${weather.daily[i].min}°`;
-        }
+        unitInUse = "celcius";
+        displayWeather(weather);
     }
 }
 
